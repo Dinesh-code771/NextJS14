@@ -1,51 +1,84 @@
-import AcmeLogo from "@/app/ui/acme-logo";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { lusitana } from "@/app/ui/fonts";
-import Image from "next/image";
-export default function Page() {
+"use client";
+
+import React, { useState } from "react";
+import CardContainer from "./components/CardContainer";
+import FilterContainer from "./components/FilterContainer";
+import AddNewModal from "./components/AddNewModal";
+import DataSyncModal from "./components/DataSyncModal";
+import ContextProvier from "./components/ContextProvier";
+
+export default function Home() {
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isSyncModalOpen, setIsSyncModalOpen] = useState<boolean>(false);
+
   return (
-    <main className="flex min-h-screen flex-col p-6">
-      <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
-        <AcmeLogo />
-      </div>
-      <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-        <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
-          <div className="relative w-0 h-0 border-l-[15px] border-r-[15px] border-b-[26px] border-l-transparent border-r-transparent border-b-black" />
-          <p
-            className={`${lusitana.className} text-xl text-gray-800 md:text-3xl md:leading-normal`}
-          >
-            <strong>Welcome to Acme.</strong> This is the example for the{" "}
-            <a href="https://nextjs.org/learn/" className="text-blue-500">
-              Next.js Learn Course
-            </a>
-            , brought to you by Vercel.
-          </p>
-          <Link
-            href="/login"
-            className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
-          >
-            <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
-          </Link>
+    <ContextProvier>
+      <main className="min-h-screen bg-[#0a0a0a] text-white">
+        <div className="container mx-auto px-4 py-4 sm:py-8">
+          {/* Header Section */}
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-center sm:text-left">
+              Job Dashboard
+            </h1>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+              <button
+                onClick={() => setIsSyncModalOpen(true)}
+                className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                Data Sync
+              </button>
+              <button
+                onClick={() => setIsAddModalOpen(true)}
+                className="w-full sm:w-auto bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Add New Job
+              </button>
+            </div>
+          </div>
+
+          {/* Filter and Card Sections */}
+          <div className="space-y-6">
+            <FilterContainer />
+            <CardContainer />
+          </div>
         </div>
-        <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-          {/* Add Hero Images Here */}
-          <Image
-            src="/hero-desktop.png"
-            width={1000}
-            height={760}
-            className="hidden md:block"
-            alt="Screenshots of the dashboard project showing desktop version"
-          />
-          <Image
-            src="/hero-mobile.png"
-            width={560}
-            height={620}
-            className="block md:hidden"
-            alt="Screenshots of the dashboard project showing mobile version"
-          />
-        </div>
-      </div>
-    </main>
+
+        <AddNewModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+        />
+
+        <DataSyncModal
+          isOpen={isSyncModalOpen}
+          onClose={() => setIsSyncModalOpen(false)}
+        />
+      </main>
+    </ContextProvier>
   );
 }
